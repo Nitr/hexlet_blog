@@ -7,3 +7,9 @@ one:
 two:
   name: MyString
   body: MyText
+
+with_image:
+  name: MyString
+  body: MyText
+  image_url: http://dithotels.com/assets/frontend/img/logo-dit.png
+
