@@ -1,11 +1,6 @@
 require 'test_helper'
-require 'active_job/test_helper'
-
-ActiveJob::Base.queue_adapter = :test
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
-  include ActiveJob::TestHelper
-
   setup do
     @post = posts(:one)
   end
@@ -23,15 +18,14 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   test "should create post" do
     @post = posts(:with_image)
 
-    assert_performed_jobs(1, only: DownloadImageJob) do
-      assert_difference('Post.count') do
-        post posts_url, params: { post: { body: @post.body, name: @post.name, image_url: @post.image_url }  }
-      end
+    assert_difference('Post.count') do
+      post posts_url, params: { post: { body: @post.body, name: @post.name, image_url: @post.image_url }  }
     end
 
     last_post = Post.last
 
     assert_redirected_to post_url(last_post)
+    assert { last_post.image.attached? }
   end
 
   test "should show post" do
